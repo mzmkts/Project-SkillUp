@@ -22,7 +22,6 @@
     "firebase-admin": "^13.3.0",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
-    "multer": "^2.0.0",
     "pg": "^8.16.0",
     "rc-util": "^5.44.4",
     "react": "^18.0.0",

@@ -2,16 +2,14 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../Account/AuthUser';
 
 const PrivateRoute = ({ element, requiredRole }) => {
-    const { user, loading, isAdmin } = useAuth();
-
-    if (loading) return null;
+    const { user } = useAuth();
 
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    if (requiredRole === 'admin' && !isAdmin()) {
-        return <Navigate to="/" replace />;
+    if (requiredRole && user.role !== requiredRole) {
+        return <Navigate to="/profile" replace />;
     }
 
     return element;

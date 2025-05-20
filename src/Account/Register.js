@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import accounts from './accounts';  
 import { Link } from 'react-router-dom';
 import '../components/styles/Register.css';
 

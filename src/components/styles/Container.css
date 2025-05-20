@@ -8,39 +8,3 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
 }
-.review {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: #fafafa;
-    display: flex;
-    flex-direction: column;
-}
-
-.review-username {
-    font-weight: 700;
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.review-comment {
-    font-size: 16px;
-    color: #444;
-    margin-bottom: 20px;
-    white-space: pre-wrap; /* сохраняет переносы строк */
-}
-
-.review-footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    color: #666;
-}
-
-.review-rating {
-    color: #ff9900; /* цвет для рейтинга */
-    font-weight: 600;
-}
-

@@ -13,8 +13,7 @@ const User = sequelize.define('User', {
         defaultValue: 'user',
     },
     age: {type: DataTypes.INTEGER, allowNull: true},
-    gender: {type: DataTypes.ENUM('male', 'female', 'other'), allowNull: true},
-    avatar: { type: DataTypes.STRING, allowNull: true }
+    gender: {type: DataTypes.ENUM('male', 'female', 'other'), allowNull: true}
 }, {
     schema: 'public',
     tableName: 'users',
