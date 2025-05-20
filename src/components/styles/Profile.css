@@ -1,0 +1,27 @@
+.profile-container {
+    padding: 50px;
+    max-width: 600px;
+    margin: 80px auto;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.profile-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.profile-button {
+    padding: 0 30px;
+    font-weight: 600;
+}

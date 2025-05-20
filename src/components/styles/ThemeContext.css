@@ -1,0 +1,14 @@
+/* Стили для темной темы */
+.dark-mode .ant-layout-content {
+  background-color: #121212; /* темный фон */
+  color: #fff; /* белый цвет текста */
+}
+
+.dark-mode .ant-btn {
+  background-color: #1890ff; /* синяя кнопка */
+  color: #fff; /* белый текст на кнопке */
+}
+
+.dark-mode .ant-btn:hover {
+  background-color: #40a9ff; /* при наведении на кнопку */
+}

@@ -1,0 +1,73 @@
+.settings-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 25px 30px;
+    background: #f9f9f9;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.settings-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.settings-form .form-group {
+    margin-bottom: 20px;
+}
+
+.settings-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #444;
+}
+
+.settings-form input,
+.settings-form select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+.settings-form input:focus,
+.settings-form select:focus {
+    outline: none;
+    border-color: #5c8df6;
+}
+
+.save-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background-color: #5c8df6;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.save-button:hover {
+    background-color: #436fd4;
+}
+
+.success-message {
+    color: green;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    margin-top: 15px;
+    text-align: center;
+}
