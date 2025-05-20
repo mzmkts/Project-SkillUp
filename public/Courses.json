@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Frontend Basics with React",
+    "description": "Learn the fundamentals of frontend development using React.js. Perfect for beginners!",
+    "image": "https://cdn-icons-png.flaticon.com/512/1126/1126012.png"
+  },
+  {
+    "id": 2,
+    "title": "Intro to UX/UI Design",
+    "description": "Understand the principles of UX/UI and how to design user-friendly interfaces.",
+    "image": "https://cdn-icons-png.flaticon.com/512/1029/1029183.png"
+  },
+  {
+    "id": 3,
+    "title": "Fullstack Web Development",
+    "description": "Go from zero to hero in web dev with hands-on projects using MERN stack.",
+    "image": "https://cdn-icons-png.flaticon.com/512/919/919825.png"
+  }
+]

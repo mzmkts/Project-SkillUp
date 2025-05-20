@@ -1,0 +1,30 @@
+.custom-nav {
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    padding: 8px 30px; /* здесь отступы слева и справа */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.custom-nav .nav-tabs .nav-link {
+    color: #e0e0e0;
+    font-weight: 600;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border: none !important;
+    padding: 8px 18px;
+}
+
+.custom-nav .nav-tabs .nav-link:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.custom-nav .nav-tabs .nav-link.active {
+    background-color: white !important;
+    color: #2575fc !important;
+    box-shadow: 0 2px 8px rgba(37, 117, 252, 0.6);
+}
+
+.custom-nav .nav-tabs .nav-link.disabled {
+    color: #888888 !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
