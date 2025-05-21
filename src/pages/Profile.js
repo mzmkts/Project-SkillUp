@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from './AuthUser';
+import { useAuth } from '../Account/AuthUser';
 import '../components/styles/Profile.css';
 
 export default function Profile() {
