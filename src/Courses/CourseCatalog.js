@@ -1,11 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import '../components/styles/CourseCatalog.css';
 import '../components/styles/Container.css';
-import { Link } from 'react-router-dom';
-import CoursesData from './CourseData';
-
-// Мок-данные курсов
-
+import {Link} from 'react-router-dom';
+import api from '../Account/api';
 
 const CourseCatalog = () => {
     const [courses, setCourses] = useState([]);
@@ -14,29 +11,29 @@ const CourseCatalog = () => {
     const [pagination, setPagination] = useState({current: 1, pageSize: 8, total: 0});
     const [filters, setFilters] = useState({category: '', search: '', sort: 'newest'});
 
-    // Имитация получения курсов с сервера
     const fetchCourses = async () => {
         try {
             setLoading(true);
             setError(null);
-            await new Promise(r => setTimeout(r, 500));
 
-            let filtered = [...CoursesData];
-            if (filters.category) filtered = filtered.filter(c => c.category === filters.category);
-            if (filters.search) {
-                const term = filters.search.toLowerCase();
-                filtered = filtered.filter(c => c.title.toLowerCase().includes(term) || c.description.toLowerCase().includes(term));
-            }
-            filtered.sort((a, b) => filters.sort === 'newest'
-                ? new Date(b.createdAt) - new Date(a.createdAt)
-                : a.title.localeCompare(b.title)
-            );
+            // Формируем query параметры для API
+            const params = {
+                page: pagination.current,
+                limit: pagination.pageSize,
+                category: filters.category || undefined,
+                search: filters.search || undefined,
+                sort: filters.sort || undefined,
+            };
 
-            const start = (pagination.current - 1) * pagination.pageSize;
-            const pageItems = filtered.slice(start, start + pagination.pageSize);
+            // Удаляем undefined параметры (чтобы не передавать лишнее)
+            Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
 
-            setCourses(pageItems);
-            setPagination(prev => ({...prev, total: filtered.length}));
+            const res = await api.get('/api/courses', {params});
+
+            setCourses(res.data.courses);
+            setPagination(prev => ({ ...prev, total: res.data.total }));
+
+
         } catch (e) {
             setError('Failed to load courses');
         } finally {
@@ -111,7 +108,7 @@ const CourseCatalog = () => {
                                     </div>
                                     <div className="card-actions">
                                         <a href="#" className="btn">Enroll</a>
-                                      <Link to={`/Courses/${c.id}`} className="btn">Details</Link>
+                                        <Link to={`/Courses/${c.id}`} className="btn">Details</Link>
                                     </div>
                                 </div>
                             ))}

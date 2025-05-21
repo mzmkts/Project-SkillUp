@@ -24,6 +24,7 @@ const RoutesContent = () => {
             <Route path="/Courses/:id" element={<CourseDetails/>}/>
             <Route path="/AboutUs" element={<AboutUs/>}/>
             <Route path="/Courses" element={<CourseCatalog/>}/>
+            <Route path="/Dashboard" element={<Dashboard/>}/>
         </Routes>
     );
 };
