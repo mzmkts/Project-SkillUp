@@ -1,4 +1,7 @@
 const Course = require('../models/Course');
+const Review = require('../models/Review');
+const User = require('../models/User');
+
 const {Op} = require('sequelize');
 
 const getCourses = async (req, res) => {
@@ -30,9 +33,24 @@ const getCourses = async (req, res) => {
             order,
             limit: parseInt(limit),
             offset,
+            include: [{model: Review, as: 'reviews'}]
         });
 
-        res.json({courses: rows, total: count});
+        // Добавляем поле averageRating в каждый курс
+        const coursesWithRating = rows.map(course => {
+            const reviews = course.reviews || [];
+            const averageRating =
+                reviews.length > 0
+                    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+                    : null;
+
+            return {
+                ...course.toJSON(),
+                averageRating: averageRating ? Number(averageRating.toFixed(1)) : null
+            };
+        });
+
+        res.json({courses: coursesWithRating, total: count});
     } catch (error) {
         console.error(error);
         res.status(500).json({error: error.message});
@@ -63,17 +81,72 @@ const updateCourse = async (req, res) => {
         res.status(500).json({error: err.message});
     }
 };
+
 const getCourseById = async (req, res) => {
     try {
         const id = req.params.id;
-        const course = await Course.findByPk(id);
+        const course = await Course.findByPk(id, {
+            include: [
+                {
+                    model: Review,
+                    as: 'reviews',
+                    include: [
+                        {
+                            model: User,
+                            as: 'user',
+                            attributes: ['username']
+                        }
+                    ]
+                }
+            ]
+        });
+
         if (!course) {
             return res.status(404).json({message: 'Course not found'});
         }
-        res.json(course);
+
+        const courseData = course.toJSON();
+
+        courseData.reviews = courseData.reviews.map(review => ({
+            id: review.id,
+            comment: review.comment,
+            rating: review.rating,
+            createdAt: review.createdAt,
+            username: review.user ? review.user.username : 'Unknown'
+        }));
+
+        res.json(courseData);
     } catch (err) {
         res.status(500).json({message: 'Server error'});
     }
 };
 
-module.exports = {getCourses, deleteCourse, updateCourse, getCourseById};
+
+const addReview = async (req, res) => {
+    try {
+        const courseId = req.params.id;
+        const {comment, rating} = req.body;
+        const userId = req.user.id;  // from authenticateToken middleware
+
+        // Проверяем, что курс существует
+        const course = await Course.findByPk(courseId);
+        if (!course) {
+            return res.status(404).json({message: 'Course not found'});
+        }
+
+        // Создаем отзыв
+        const review = await Review.create({
+            comment,
+            rating,
+            userId,
+            courseId,
+        });
+
+        res.status(201).json(review);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Server error'});
+    }
+};
+
+module.exports = {getCourses, deleteCourse, updateCourse, getCourseById, addReview};

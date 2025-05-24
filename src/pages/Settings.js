@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import '../components/styles/Container.css';
 import { useAuth } from "../Account/AuthUser";
 import api from '../Account/api';
-import '../components/styles/Settings.css'
+import '../components/styles/Settings.css';
+
 export default function Settings() {
-    const { user, setUser } = useAuth(); // чтобы обновить user локально, если нужно
+    const { user, setUser } = useAuth();
 
     const [formData, setFormData] = useState({
         id: '',
@@ -38,11 +39,15 @@ export default function Settings() {
         setMessage('');
         setError('');
         try {
-            console.log('Отправляем данные:', formData);  // Лог для проверки
-            const res = await api.put('/api/auth/updateUser', formData);
+            console.log('Отправляем данные:', formData);
+            const res = await api.put(`/api/users/update/${formData.id}`, {
+                username: formData.username,
+                age: formData.age,
+                gender: formData.gender,
+                password: formData.password,
+            });
             console.log('Ответ сервера:', res);
             setMessage('Данные успешно сохранены');
-            // Можно обновить user в контексте, если есть функция setUser
         } catch (err) {
             console.error('Ошибка при обновлении:', err.response || err);
             setError(err.response?.data?.error || 'Ошибка на сервере');
