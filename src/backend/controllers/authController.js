@@ -110,36 +110,5 @@ const me = async (req, res) => {
     }
 };
 
-const updateUser = async (req, res) => {
-    try {
-        const {id, username, age, gender, password} = req.body;
 
-        if (!id) {
-            return res.status(400).json({error: 'User ID is required'});
-        }
-
-        const user = await User.findByPk(id);
-        if (!user) {
-            return res.status(404).json({error: 'User not found'});
-        }
-
-        if (username) user.username = username;
-        if (age !== undefined) user.age = age;
-        if (gender) user.gender = gender;
-
-        if (password) {
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(password, salt);
-        }
-
-        await user.save();
-
-        res.json({message: 'User updated successfully'});
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({error: 'Server error'});
-    }
-};
-
-
-module.exports = {register, login, updateUser, getCurrentUser, authenticateToken, me};
+module.exports = {register, login, getCurrentUser, authenticateToken, me};
