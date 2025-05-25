@@ -1,25 +1,30 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useAuth} from '../Account/AuthUser';
 import '../components/styles/Profile.css';
 
 export default function Profile() {
-    const { user } = useAuth();
+    const {user} = useAuth();
 
-    if (!user) return <div className="profile-container">Not logged in</div>;
+    if (!user) {
+        return <div className="profile-container">Not logged in</div>;
+    }
 
-    const avatarUrl = user.avatar
-        ? `http://localhost:5000${user.avatar.startsWith('/uploads/') ? user.avatar : `/uploads/${user.avatar}`}`
-        : '/default-avatar.png';
+    const SERVER_URL = 'http://localhost:5000';
+    const avatarSrc = user.avatar ? SERVER_URL + user.avatar : '/default-avatar.png';
+    console.log('User:', user);
+    console.log('Avatar URL:', avatarSrc);
+
 
     return (
         <div className="profile-container">
             <div className="profile-header">
                 <img
-                    src={avatarUrl}
+                    src={avatarSrc}
                     alt="Avatar"
                     className="profile-avatar"
-                    style={{ width: 150, height: 150, borderRadius: '50%', objectFit: 'cover' }}
+                    style={{width: 150, height: 150, borderRadius: '50%', objectFit: 'cover'}}
                 />
+
                 <h2>Hi, {user.username}!</h2>
             </div>
             <p><strong>Email:</strong> {user.email}</p>
@@ -29,4 +34,3 @@ export default function Profile() {
         </div>
     );
 }
-
