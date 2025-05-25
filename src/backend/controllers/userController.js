@@ -8,26 +8,26 @@ const getUsers = async (req, res) => {
         });
         res.json(users);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({error: err.message});
     }
 };
 
 const deleteUser = async (req, res) => {
     try {
-        const { id } = req.params;
-        await User.destroy({ where: { id } });
-        res.json({ message: 'User deleted' });
+        const {id} = req.params;
+        await User.destroy({where: {id}});
+        res.json({message: 'User deleted'});
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({error: err.message});
     }
 };
 
 const updateUserAdmin = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { username, age, gender, password } = req.body;
+        const {id} = req.params;
+        const {username, age, gender, password} = req.body;
         const user = await User.findByPk(id);
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.status(404).json({error: 'User not found'});
 
         if (username) user.username = username;
         if (age !== undefined) user.age = age;
@@ -41,22 +41,22 @@ const updateUserAdmin = async (req, res) => {
         await user.save();
         res.json(user);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({error: err.message});
     }
 };
 
 const updateUser = async (req, res) => {
     try {
-        const { id } = req.params; // берём id из URL
-        const { username, age, gender, password } = req.body; // остальное из тела
+        const {id} = req.params; // берём id из URL
+        const {username, age, gender, password} = req.body; // остальное из тела
 
         if (!id) {
-            return res.status(400).json({ error: 'User ID is required' });
+            return res.status(400).json({error: 'User ID is required'});
         }
 
         const user = await User.findByPk(id);
         if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({error: 'User not found'});
         }
 
         if (username) user.username = username;
@@ -70,13 +70,29 @@ const updateUser = async (req, res) => {
 
         await user.save();
 
-        res.json({ message: 'User updated successfully' });
+        res.json({message: 'User updated successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        res.status(500).json({error: 'Server error'});
+    }
+};
+const uploadAvatar = async (req, res) => {
+    try {
+        const {id} = req.params;
+        if (!req.file) return res.status(400).json({error: 'No file uploaded'});
+
+        const user = await User.findByPk(id);
+        if (!user) return res.status(404).json({error: 'User not found'});
+
+        user.avatar = `/uploads/${req.file.filename}`;
+        await user.save();
+
+        res.json({message: 'Avatar uploaded', avatar: user.avatar});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'Failed to upload avatar'});
     }
 };
 
 
-
-module.exports = { getUsers, deleteUser, updateUserAdmin, updateUser };
+module.exports = {getUsers, deleteUser, updateUserAdmin, updateUser, uploadAvatar};
