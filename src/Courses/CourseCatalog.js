@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import '../components/styles/CourseCatalog.css';
 import '../components/styles/Container.css';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import api from '../Account/api';
 
 const CourseCatalog = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [pagination, setPagination] = useState({ current: 1, pageSize: 8, total: 0 });
-    const [filters, setFilters] = useState({ category: '', search: '', sort: 'newest' });
+    const [pagination, setPagination] = useState({current: 1, pageSize: 6, total: 0});
+    const [filters, setFilters] = useState({category: '', search: '', sort: 'newest'});
 
     const fetchCourses = async () => {
         try {
@@ -26,16 +26,20 @@ const CourseCatalog = () => {
 
             Object.keys(params).forEach((key) => params[key] === undefined && delete params[key]);
 
-            const res = await api.get('/api/courses', { params });
+            const res = await api.get('/api/courses', {params});
 
             setCourses(res.data.courses);
-            setPagination((prev) => ({ ...prev, total: res.data.total }));
-        } catch (e) {
+            setPagination((prev) => ({...prev, total: Number(res.data.total)}));
+
+            // 🕒 Искусственная задержка 1.5 секунды
+            await new Promise((resolve) => setTimeout(resolve, 500));
+        } catch {
             setError('Failed to load courses');
         } finally {
             setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchCourses();
@@ -45,6 +49,7 @@ const CourseCatalog = () => {
         const fullStars = Math.floor(rating);
         const halfStar = rating % 1 >= 0.5;
         const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
         return (
             <>
                 {'★'.repeat(fullStars)}
@@ -53,6 +58,8 @@ const CourseCatalog = () => {
             </>
         );
     };
+
+    const totalPages = Math.ceil((pagination.total) / pagination.pageSize) -1;
 
     return (
         <div className="containerforall">
@@ -64,14 +71,14 @@ const CourseCatalog = () => {
                             type="text"
                             placeholder="Search courses..."
                             value={filters.search}
-                            onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-                            onKeyDown={(e) => e.key === 'Enter' && setPagination((p) => ({ ...p, current: 1 }))}
+                            onChange={(e) => setFilters((f) => ({...f, search: e.target.value}))}
+                            onKeyDown={(e) => e.key === 'Enter' && setPagination((p) => ({...p, current: 1}))}
                         />
                         <select
                             value={filters.category}
                             onChange={(e) => {
-                                setFilters((f) => ({ ...f, category: e.target.value }));
-                                setPagination((p) => ({ ...p, current: 1 }));
+                                setFilters((f) => ({...f, category: e.target.value}));
+                                setPagination((p) => ({...p, current: 1}));
                             }}
                         >
                             <option value="">All Categories</option>
@@ -82,14 +89,14 @@ const CourseCatalog = () => {
                         </select>
                         <select
                             value={filters.sort}
-                            onChange={(e) => setFilters((f) => ({ ...f, sort: e.target.value }))}
+                            onChange={(e) => setFilters((f) => ({...f, sort: e.target.value}))}
                         >
                             <option value="newest">Newest First</option>
                             <option value="alphabetical">A-Z</option>
                         </select>
                         <button
                             onClick={() => {
-                                setPagination((p) => ({ ...p, current: 1 }));
+                                setPagination((p) => ({...p, current: 1}));
                                 fetchCourses();
                             }}
                         >
@@ -99,27 +106,27 @@ const CourseCatalog = () => {
                 </div>
 
                 {error && <div className="error-box">{error}</div>}
+
                 {loading ? (
                     <div className="loading">Loading...</div>
                 ) : (
-                    <div className="courses-grid">
-                        {courses.map((c) => {
-                            console.log('Course:', c); // ← Здесь отладка
-                            return (
+                    <>
+                        <div className="courses-grid">
+                            {courses.map((c) => (
                                 <div key={c.id} className="course-card">
-                                    <img src={c.image} alt={c.title} />
+                                    <img src={c.image} alt={c.title}/>
                                     <h3>{c.title}</h3>
                                     <p>{c.description.slice(0, 80)}...</p>
 
                                     <div className="rating">
                                         Рейтинг:{' '}
-                                        {c.averageRating
-                                            ? (
-                                                <>
-                                                    {renderStars(c.averageRating)} ({c.averageRating.toFixed(1)})
-                                                </>
-                                            )
-                                            : 'Нет оценок'}
+                                        {c.averageRating ? (
+                                            <>
+                                                {renderStars(c.averageRating)} ({c.averageRating.toFixed(1)})
+                                            </>
+                                        ) : (
+                                            'Нет оценок'
+                                        )}
                                     </div>
 
                                     <div className="card-footer">
@@ -128,13 +135,37 @@ const CourseCatalog = () => {
                                     </div>
 
                                     <div className="card-actions">
-                                        <a href="#" className="btn">Enroll</a>
-                                        <Link to={`/Courses/${c.id}`} className="btn">Details</Link>
+                                        <a href="#" className="btn">
+                                            Enroll
+                                        </a>
+                                        <Link to={`/Courses/${c.id}`} className="btn">
+                                            Details
+                                        </Link>
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
+                            ))}
+                        </div>
+
+                        <div className="pagination-controls">
+                            <button
+                                disabled={pagination.current === 1}
+                                onClick={() => setPagination((p) => ({...p, current: p.current - 1}))}
+                            >
+                                Previous
+                            </button>
+
+                            <span>
+                Page {pagination.current} of {totalPages || 1}
+              </span>
+
+                            <button
+                                disabled={pagination.current === totalPages || totalPages === 0}
+                                onClick={() => setPagination((p) => ({...p, current: p.current + 1}))}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </>
                 )}
             </div>
         </div>
