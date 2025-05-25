@@ -148,5 +148,27 @@ const addReview = async (req, res) => {
         res.status(500).json({message: 'Server error'});
     }
 };
+const createCourse = async (req, res) => {
+    try {
+        const {title, description, image, category, price} = req.body;
 
-module.exports = {getCourses, deleteCourse, updateCourse, getCourseById, addReview};
+        if (!title) {
+            return res.status(400).json({error: 'Title is required'});
+        }
+
+        const newCourse = await Course.create({
+            title,
+            description: description || '',
+            image: image || '',
+            category: category || 'other',
+            price: price !== undefined ? price : 0.00
+        });
+
+        res.status(201).json(newCourse);
+    } catch (err) {
+        console.error('Error creating course:', err);
+        res.status(500).json({error: 'Failed to create course'});
+    }
+};
+
+module.exports = {getCourses, deleteCourse, updateCourse, getCourseById, addReview, createCourse};

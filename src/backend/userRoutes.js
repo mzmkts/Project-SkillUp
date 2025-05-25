@@ -13,6 +13,7 @@ router.post(
     upload.single('avatar'),
     uploadAvatar
 );
+router.put('/admin/update/:id', updateUserAdmin);
 
 
 module.exports = router;
