@@ -19,7 +19,6 @@ const register = async (req, res) => {
             return res.status(400).json({error: 'Username or email already exists'});
         }
 
-        // Создаем нового пользователя (предполагается, что в модели User есть хук для хэширования пароля)
         const user = await User.create({username, email, password});
 
         // Генерируем JWT токен
@@ -69,12 +68,12 @@ const getCurrentUser = async (req, res) => {
         const authHeader = req.headers.authorization;
         if (!authHeader) return res.status(401).json({error: 'No token provided'});
 
-        const token = authHeader.split(' ')[1]; // Bearer <token>
+        const token = authHeader.split(' ')[1];
         if (!token) return res.status(401).json({error: 'Token malformed'});
 
         const decoded = jwt.verify(token, jwtSecret);
         const user = await User.findByPk(decoded.id, {
-            attributes: ['id', 'username', 'email', 'role', 'age', 'gender'],
+            attributes: ['id', 'username', 'email', 'role', 'age', 'gender', 'avatar']
         });
 
         if (!user) return res.status(404).json({error: 'User not found'});
@@ -93,7 +92,7 @@ const authenticateToken = (req, res, next) => {
 
     jwt.verify(token, jwtSecret, (err, userData) => {
         if (err) return res.status(403).json({error: 'Invalid token'});
-        req.user = userData; // { id, username, role }
+        req.user = userData;
         next();
     });
 };
@@ -101,8 +100,9 @@ const authenticateToken = (req, res, next) => {
 const me = async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id, {
-            attributes: ['id', 'username', 'email', 'role', 'age', 'gender'],
+            attributes: ['id', 'username', 'email', 'role', 'age', 'gender', 'avatar']
         });
+
         if (!user) return res.status(404).json({error: 'User not found'});
         res.json(user);
     } catch (error) {
