@@ -1,8 +1,9 @@
 const Course = require('../models/Course');
 const Review = require('../models/Review');
 const User = require('../models/User');
+const EnrollCourse = require("../models/EnrollCourse");
 
-const {Op} = require('sequelize');
+const {Op, UniqueConstraintError} = require('sequelize');
 
 const getCourses = async (req, res) => {
     try {
@@ -171,4 +172,49 @@ const createCourse = async (req, res) => {
     }
 };
 
-module.exports = {getCourses, deleteCourse, updateCourse, getCourseById, addReview, createCourse};
+const enrollCourse = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const courseId = parseInt(req.params.id, 10);
+
+        const course = await Course.findByPk(courseId);
+        if (!course) return res.status(404).json({message: 'Course not found'});
+
+        const enrollment = await EnrollCourse.create({userId, courseId});
+        return res.status(201).json({message: 'Enrolled successfully', enrollment});
+    } catch (err) {
+        if (err instanceof UniqueConstraintError) {
+            return res.status(400).json({message: 'Already enrolled in this course'});
+        }
+        console.error(err);
+        return res.status(500).json({message: 'Server error'});
+    }
+};
+const getMyCourses = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findByPk(userId, {
+            include: [{
+                model: Course,
+                as: 'courses',
+                through: {attributes: ['purchasedAt']}
+            }]
+        });
+        if (!user) return res.status(404).json({message: 'User not found'});
+        return res.json(user.courses);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({message: 'Server error'});
+    }
+};
+
+module.exports = {
+    getCourses,
+    deleteCourse,
+    updateCourse,
+    getCourseById,
+    addReview,
+    createCourse,
+    enrollCourse,
+    getMyCourses
+};

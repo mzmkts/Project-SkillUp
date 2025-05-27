@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import '../components/styles/Container.css';
-import { useAuth } from "../Account/AuthUser";
-import api from '../Account/api';
 import '../components/styles/Settings.css';
+import { useAuth } from '../Account/AuthUser';
+import api from '../Account/api';
 
 export default function Settings() {
+    const { t } = useTranslation();
     const { user, setUser } = useAuth();
 
     const [formData, setFormData] = useState({
@@ -14,7 +17,6 @@ export default function Settings() {
         gender: '',
         password: ''
     });
-
     const [avatarFile, setAvatarFile] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState('');
     const [message, setMessage] = useState('');
@@ -29,7 +31,7 @@ export default function Settings() {
                 gender: user.gender || '',
                 password: ''
             });
-            setAvatarPreview(user.avatarUrl || ''); // если в user есть ссылка на аватар
+            setAvatarPreview(user.avatarUrl || '');
         }
     }, [user]);
 
@@ -37,88 +39,72 @@ export default function Settings() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // Обработчик выбора файла аватара
     const handleAvatarChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setAvatarFile(file);
-            setAvatarPreview(URL.createObjectURL(file)); // показываем превью
+            setAvatarPreview(URL.createObjectURL(file));
         }
     };
 
-    // Отправка обновленных данных и аватара
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
         setError('');
 
         try {
-            // 1) Обновляем профиль (без аватара)
-            const res = await api.put(`/api/users/update/${formData.id}`, {
+            await api.put(`/api/users/update/${formData.id}`, {
                 username: formData.username,
                 age: formData.age,
                 gender: formData.gender,
-                password: formData.password,
+                password: formData.password
             });
-            console.log('Ответ сервера (обновление):', res);
 
-            // 2) Если выбран файл аватара — отправляем его
             if (avatarFile) {
                 const avatarData = new FormData();
                 avatarData.append('avatar', avatarFile);
-
                 const avatarRes = await api.post(
                     `/api/users/uploadAvatar/${formData.id}`,
                     avatarData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                            Authorization: `Bearer ${user.token}`,
-                        },
-                    }
+                    { headers: { 'Content-Type': 'multipart/form-data' } }
                 );
-
-                console.log('Ответ сервера (аватар):', avatarRes);
-
-                // Обновим аватар в локальном user, если нужно
                 if (avatarRes.data.avatarUrl) {
                     setUser({ ...user, avatarUrl: avatarRes.data.avatarUrl });
                     setAvatarPreview(avatarRes.data.avatarUrl);
                 }
             }
 
-            setMessage('Данные успешно сохранены');
+            setMessage(t('settings.success'));
         } catch (err) {
-            console.error('Ошибка при обновлении:', err.response || err);
-            setError(err.response?.data?.error || 'Ошибка на сервере');
+            console.error(err);
+            setError(err.response?.data?.error || t('settings.error'));
         }
     };
 
     return (
         <div className="containerforall">
-            <h2>Настройки</h2>
+            <Helmet>
+                <title>{t('settings.title')} — SkillUp</title>
+                <meta name="description" content={t('settings.metaDescription')} />
+            </Helmet>
+            <h2>{t('settings.title')}</h2>
             <form onSubmit={handleSubmit}>
-
-                {/* Аватарка с превью */}
                 <div>
-                    <label>Аватар:</label><br />
+                    <label htmlFor="avatar">{t('settings.avatar')}</label><br />
                     {avatarPreview && (
                         <img
                             src={avatarPreview}
-                            alt="Avatar preview"
+                            alt={t('settings.avatarAlt')}
                             style={{ width: 100, height: 100, objectFit: 'cover', borderRadius: '50%' }}
                         />
                     )}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleAvatarChange}
-                    />
+                    <input id="avatar" type="file" accept="image/*" onChange={handleAvatarChange} />
                 </div>
 
                 <div>
-                    <label>Имя:</label>
+                    <label htmlFor="username">{t('settings.username')}</label>
                     <input
+                        id="username"
                         type="text"
                         name="username"
                         value={formData.username}
@@ -126,9 +112,11 @@ export default function Settings() {
                         required
                     />
                 </div>
+
                 <div>
-                    <label>Возраст:</label>
+                    <label htmlFor="age">{t('settings.age')}</label>
                     <input
+                        id="age"
                         type="number"
                         name="age"
                         value={formData.age}
@@ -136,25 +124,35 @@ export default function Settings() {
                         required
                     />
                 </div>
+
                 <div>
-                    <label>Пол:</label>
-                    <select name="gender" value={formData.gender} onChange={handleChange} required>
-                        <option value="">Выбери пол</option>
-                        <option value="male">Мужской</option>
-                        <option value="female">Женский</option>
-                        <option value="other">Другое</option>
+                    <label htmlFor="gender">{t('settings.gender')}</label>
+                    <select
+                        id="gender"
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">{t('settings.genderSelect')}</option>
+                        <option value="male">{t('settings.male')}</option>
+                        <option value="female">{t('settings.female')}</option>
+                        <option value="other">{t('settings.other')}</option>
                     </select>
                 </div>
+
                 <div>
-                    <label>Новый пароль:</label>
+                    <label htmlFor="password">{t('settings.password')}</label>
                     <input
+                        id="password"
                         type="password"
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
                     />
                 </div>
-                <button type="submit">Сохранить изменения</button>
+
+                <button type="submit">{t('settings.save')}</button>
                 {message && <p style={{ color: 'green' }}>{message}</p>}
                 {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>

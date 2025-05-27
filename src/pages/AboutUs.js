@@ -1,13 +1,14 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
+import { useTranslation } from 'react-i18next';
 import '../components/styles/AboutUs.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibXpta3RzIiwiYSI6ImNtYjN3NWJkeTA4czUya3F1Y2g5dGplbDkifQ.BnAjdIOAQTPtc9nZ-rwM9Q';
 
-
 export default function AboutUs() {
     const mapContainer = useRef(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!mapContainer.current) return;
@@ -15,7 +16,7 @@ export default function AboutUs() {
         const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [76.87127635425507, 43.21448792513457], // lng, lat
+            center: [76.87127635425507, 43.21448792513457],
             zoom: 14,
         });
 
@@ -28,34 +29,33 @@ export default function AboutUs() {
 
     return (
         <div className="about-container">
-            <h1>About Us</h1>
-            <p>
-                Welcome to our platform! We are passionate about providing high-quality educational content and
-                interactive courses
-                for everyone interested in web development, design, and technology.
-            </p>
-            <p>
-                Our mission is to make learning simple and accessible for all — from beginners to advanced learners.
-                We offer a variety of courses, english, programming courses, such as Python, Java, C++ courses and etc.
-            </p>
+            <h1>{t('about.title')}</h1>
+            <p>{t('about.welcome')}</p>
+            <p>{t('about.mission')}</p>
+
             <div className="about-section">
-                <h2>Why Choose Us?</h2>
+                <h2>{t('about.whyChooseUs')}</h2>
                 <ul>
-                    <li>📚 Expert-led courses</li>
-                    <li>⚡ Interactive learning with real projects</li>
-                    <li>🎯 Personalized dashboard to track your progress</li>
-                    <li>🌐 Community of passionate learners</li>
+                    {t('about.benefits', { returnObjects: true }).map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 </ul>
             </div>
+
             <div className="about-section">
-                <h2>Contact</h2>
-                <p>Email: support@skillup.kz</p>
-                <p>Instagram: @skill-up</p>
+                <h2>{t('about.contact')}</h2>
+                <p>{t('about.email')}</p>
+                <p>{t('about.instagram')}</p>
             </div>
 
             <div
                 ref={mapContainer}
-                style={{height: '400px', width: '100%', marginTop: '20px', borderRadius: '10px'}}
+                style={{
+                    height: '400px',
+                    width: '100%',
+                    marginTop: '20px',
+                    borderRadius: '10px',
+                }}
             />
         </div>
     );

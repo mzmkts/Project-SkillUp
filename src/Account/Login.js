@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useAuth } from './AuthUser';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../components/styles/Login.css';
 
 export default function Login() {
+    const { t } = useTranslation();
     const { login } = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -24,17 +26,16 @@ export default function Login() {
 
             navigate('/profile');
         } catch (err) {
-            setError('Network error: ' + err.message);
+            setError(t('networkError', { message: err.message }));
         }
     };
 
-
     return (
         <div className="login-container">
-            <h2>Login</h2>
+            <h2>{t('login.title')}</h2>
             <form onSubmit={handleLogin}>
                 <div>
-                    <label>Username:</label>
+                    <label>{t('login.username')}:</label>
                     <input
                         type="text"
                         value={username}
@@ -43,7 +44,7 @@ export default function Login() {
                     />
                 </div>
                 <div>
-                    <label>Password:</label>
+                    <label>{t('login.password')}:</label>
                     <input
                         type="password"
                         value={password}
@@ -51,11 +52,11 @@ export default function Login() {
                         required
                     />
                 </div>
-                {error && <p style={{color: 'red'}}>{error}</p>}
-                <button type="submit">Login</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit">{t('login.loginButton')}</button>
 
                 <div style={{ textAlign: 'center', marginTop: '16px' }}>
-                    Don't have an account? <Link to="/register">Go to Register</Link>
+                    {t('login.noAccount')} <Link to="/register">{t('login.goToRegister')}</Link>
                 </div>
             </form>
         </div>

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const sequelize = require('./backend/config/db');
-require('./backend/models/User');
+require('./backend/models/User')
 require('./backend/models/Course');
 const userRoutes = require('./backend/userRoutes');
 const courseRoutes = require('./backend/courseRoutes');
@@ -34,6 +34,7 @@ async function createAdmin() {
             role: 'admin',
             age: 30,
             gender: 'male'
+
         });
         console.log('✅ Admin account created');
     } else {

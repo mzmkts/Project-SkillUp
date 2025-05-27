@@ -1,0 +1,99 @@
+{
+  "about": {
+    "title": "About Us",
+    "welcome": "Welcome to our platform! We are passionate about providing high-quality educational content and interactive courses for everyone interested in web development, design, and technology.",
+    "mission": "Our mission is to make learning simple and accessible for all — from beginners to advanced learners. We offer a variety of courses, English, programming such as Python, Java, C++, and more.",
+    "whyChooseUs": "Why Choose Us?",
+    "benefits": [
+      "📚 Expert-led courses",
+      "⚡ Interactive learning with real projects",
+      "🎯 Personalized dashboard to track your progress",
+      "🌐 Community of passionate learners"
+    ],
+    "contact": "Contact",
+    "email": "Email: support@skillup.kz",
+    "instagram": "Instagram: @skill-up"
+  },
+  "nav": {
+    "profile": "Profile",
+    "courses": "Courses",
+    "about": "About Us",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "settings": {
+    "title": "Settings",
+    "avatar": "Avatar:",
+    "username": "Username:",
+    "age": "Age:",
+    "gender": "Gender:",
+    "genderSelect": "Select gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "password": "New Password:",
+    "save": "Save Changes",
+    "success": "Profile updated successfully",
+    "error": "Server error"
+  },
+  "profile": {
+    "notLoggedIn": "Not logged in",
+    "greeting": "Hi",
+    "email": "Email",
+    "role": "Role",
+    "user": "User",
+    "age": "Age",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other"
+  },
+  "catalog": {
+    "title": "Available Courses",
+    "searchPlaceholder": "Search courses...",
+    "allCategories": "All Categories",
+    "programming": "Programming",
+    "design": "Design",
+    "business": "Business",
+    "language": "Language",
+    "newest": "Newest First",
+    "alphabetical": "A-Z",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "error": "Failed to load courses",
+    "rating": "Rating",
+    "noRatings": "No ratings",
+    "enroll": "Enroll",
+    "details": "Details",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}} of {{total}}"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "noAccount": "Don't have an account?",
+    "goToRegister": "Go to Register",
+    "networkError": "Network error: {{message}}"
+  },
+  "register": {
+    "Register": "Register",
+    "Username": "Username",
+    "Password": "Password",
+    "Confirm Password": "Confirm Password",
+    "Email": "Email",
+    "All fields are required": "All fields are required",
+    "Passwords do not match": "Passwords do not match",
+    "Registration failed": "Registration failed",
+    "Registration successful! Please log in.": "Registration successful! Please log in.",
+    "Network error. Please try again later.": "Network error. Please try again later.",
+    "Already have an account?": "Already have an account?",
+    "Go to Login": "Go to Login",
+    "RegisterButton": "Register"
+  }
+}

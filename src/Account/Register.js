@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
-import accounts from './accounts';  
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import '../components/styles/Register.css';
 
 export default function Register() {
+    const { t } = useTranslation();
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -15,12 +17,12 @@ export default function Register() {
         e.preventDefault();
 
         if (!username || !password || !confirmPassword || !email) {
-            setError('All fields are required');
+            setError(t('register.All fields are required'));
             return;
         }
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError(t('Passwords do not match'));
             return;
         }
 
@@ -36,13 +38,12 @@ export default function Register() {
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.error || 'Registration failed');
+                setError(data.error || t('Registration failed'));
                 setSuccessMessage('');
                 return;
             }
 
-            // Если регистрация успешна
-            setSuccessMessage('Registration successful! Please log in.');
+            setSuccessMessage(t('register.Registration successful! Please log in.'));
             setError('');
             setUsername('');
             setPassword('');
@@ -50,17 +51,17 @@ export default function Register() {
             setEmail('');
 
         } catch (err) {
-            setError('Network error. Please try again later.');
+            setError(t('register.Network error. Please try again later.'));
             setSuccessMessage('');
         }
     };
 
     return (
         <div className="register-container">
-            <h2>Register</h2>
+            <h2>{t('register.Register')}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">{t('register.Username')}</label>
                     <input
                         type="text"
                         id="username"
@@ -70,7 +71,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t('register.Password')}</label>
                     <input
                         type="password"
                         id="password"
@@ -80,7 +81,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword">{t('register.Confirm Password')}</label>
                     <input
                         type="password"
                         id="confirmPassword"
@@ -90,7 +91,7 @@ export default function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{t('register.Email')}</label>
                     <input
                         type="email"
                         id="email"
@@ -101,11 +102,10 @@ export default function Register() {
                 </div>
                 {error && <p style={{color: 'red'}}>{error}</p>}
                 {successMessage && <p style={{color: 'green'}}>{successMessage}</p>}
-                <button type="submit">Register</button>
-                
-                {/* Добавленный блок с ссылкой на логин */}
+                <button type="submit">{t('register.RegisterButton')}</button>
+
                 <div style={{ textAlign: 'center', marginTop: '16px' }}>
-                    Already have an account? <Link to="/login">Go to Login</Link>
+                    {t('register.Already have an account?')} <Link to="/login">{t('register.Go to Login')}</Link>
                 </div>
             </form>
         </div>

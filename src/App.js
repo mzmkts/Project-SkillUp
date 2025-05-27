@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navigation.js'; // твой кастомный navbar без antd
-import RoutesContent from './Routes.tsx'; // убедись, что ты не указываешь .tsx в импорте
-
+import RoutesContent from './Routes.tsx';
 const App = () => {
     return (
         <div>

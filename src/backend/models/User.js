@@ -14,7 +14,7 @@ const User = sequelize.define('User', {
     },
     age: {type: DataTypes.INTEGER, allowNull: true},
     gender: {type: DataTypes.ENUM('male', 'female', 'other'), allowNull: true},
-    avatar: { type: DataTypes.STRING, allowNull: true }
+    avatar: {type: DataTypes.STRING, allowNull: true, defaultValue: '/uploads/default.png'},
 }, {
     schema: 'public',
     tableName: 'users',
